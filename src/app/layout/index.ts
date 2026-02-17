@@ -1,1 +1,3 @@
-export { default as CenteredLayout } from './CenteredLayout.vue'
+import CenteredLayout from './CenteredLayout.vue'
+
+export { CenteredLayout }
