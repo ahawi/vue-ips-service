@@ -17,8 +17,18 @@ const form: Ref<RegisterForm> = ref({
   address: ''
 })
 
-const registerHandler = (): void => {
-  if (isFormValid(form.value)) registration(form.value)
+const isSubmitted: Ref<boolean> = ref(false)
+const isLoading: Ref<boolean> = ref(false)
+
+const registerHandler = async (): Promise<void> => {
+  isSubmitted.value = true
+
+  if (!isFormValid(form.value)) return
+  isSubmitted.value = false
+
+  isLoading.value = true
+  await registration(form.value)
+  isLoading.value = false
 }
 
 const isFormValid = (
@@ -31,6 +41,8 @@ const isFormValid = (
 } => {
   return !!form.email && !!form.password
 }
+
+const hasError = (field: string | null): boolean => isSubmitted.value && !field
 </script>
 
 <template>
@@ -40,29 +52,36 @@ const isFormValid = (
       <input
         placeholder="Email"
         class="input"
-        v-model="form.email" />
+        v-model="form.email"
+        :class="{ error: hasError(form.email) }" />
       <input
         placeholder="Password"
         type="password"
         class="input"
-        v-model="form.password" />
+        v-model="form.password"
+        :class="{ error: hasError(form.password) }"
+        :disabled="isLoading" />
       <input
         placeholder="Name"
         class="input"
-        v-model="form.name" />
+        v-model="form.name"
+        :disabled="isLoading" />
       <input
         placeholder="Address"
         class="input"
-        v-model="form.address" />
+        v-model="form.address"
+        :disabled="isLoading" />
     </div>
     <div class="hstack">
       <RouterLink
         :to="LOGIN_LINK"
+        :disabled="isLoading"
         class="btn btn-ghost">
         Авторизоваться
       </RouterLink>
       <button
         type="button"
+        :disabled="isLoading"
         @click="registerHandler"
         class="btn btn-primary">
         Зарегистрироваться
@@ -80,5 +99,17 @@ const isFormValid = (
 
 .hstack {
   justify-content: space-between;
+}
+
+.error {
+  border: 1px solid red;
+}
+
+.btn:disabled {
+  opacity: 0.3;
+}
+
+.input:disabled {
+  background: gainsboro;
 }
 </style>
