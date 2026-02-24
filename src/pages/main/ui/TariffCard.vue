@@ -3,6 +3,10 @@ import type { Tariff } from '../api'
 
 defineProps<Tariff>()
 
+defineEmits<{
+  (e: 'subscribe', id: string): void
+}>()
+
 const currencyFormatter = new Intl.NumberFormat('ru-RU', {
   style: 'currency',
   currency: 'RUB'
@@ -34,11 +38,12 @@ const currencyFormatter = new Intl.NumberFormat('ru-RU', {
         <RouterLink to="/">Подробнее</RouterLink>
         <button
           class="btn btn-primary"
-          type="button">
+          type="button"
+          @click="$emit('subscribe', id)">
           Подключить
         </button>
       </div>
-    </div>
+    </div> 
   </div>
 </template>
 
