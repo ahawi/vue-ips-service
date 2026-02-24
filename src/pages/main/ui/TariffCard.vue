@@ -43,7 +43,7 @@ const currencyFormatter = new Intl.NumberFormat('ru-RU', {
           Подключить
         </button>
       </div>
-    </div> 
+    </div>
   </div>
 </template>
 
