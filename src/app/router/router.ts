@@ -1,10 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type NavigationGuardNext } from 'vue-router'
 import { CenteredLayout, SidebarLayout } from '../layout'
 import { AUTH_SECTION_ROUTE } from '@/pages/auth'
 import { MAIN_ROUTE } from '@/pages/main'
 import { MAIN_LINK } from '@/shared/config'
 import { useUserStore } from '@/entities/user'
 import { SUBSCRIBES_ROUTE } from '@/pages/subscribes'
+import { INVOICES_ROUTE } from '@/pages/invoices'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,7 +23,8 @@ const router = createRouter({
           name: MAIN_ROUTE.name,
           component: MAIN_ROUTE.component
         },
-        SUBSCRIBES_ROUTE
+        SUBSCRIBES_ROUTE,
+        { ...INVOICES_ROUTE, beforeEnter: (to, from, next) => adminRouteGuard(next) }
       ],
       component: SidebarLayout
     }
@@ -46,5 +48,12 @@ router.beforeEach((to, from, next) => {
 
   return next({ name: 'login' })
 })
+
+const adminRouteGuard = (next: NavigationGuardNext) => {
+  const { isAdmin } = useUserStore()
+
+  if (isAdmin) next()
+  else next({ name: MAIN_LINK.name })
+}
 
 export default router
