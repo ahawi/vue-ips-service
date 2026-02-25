@@ -2,18 +2,27 @@ import { defineStore } from 'pinia'
 import { computed, type Ref } from 'vue'
 import { useStorage } from '@vueuse/core'
 
-interface User {
+const USER_ROLES = {
+  ADMIN: 'admin',
+  USER: 'user'
+} as const
+
+type Role = (typeof USER_ROLES)[keyof typeof USER_ROLES]
+
+export interface User {
   id: string
   email: string
   name: string | null
   address: string | null
-  role: string
+  role: Role
   token: string
 }
 
 interface UserStore {
   isUserAuth: Ref<boolean>
+  isAdmin: Ref<boolean>
   setUser: (userData: User) => void
+  resetUser: () => void
   getUserEmail: () => string
   getToken: () => string
 }
@@ -36,6 +45,10 @@ export const useUserStore = defineStore('useUserStore', (): UserStore => {
     user.value = userData
   }
 
+  const resetUser: UserStore['resetUser'] = () => {
+    user.value = null
+  }
+
   const getUserEmail: UserStore['getUserEmail'] = () => {
     if (user.value === null) throw new Error('Logic Exception. User not authorized')
 
@@ -48,5 +61,7 @@ export const useUserStore = defineStore('useUserStore', (): UserStore => {
     return user.value.token
   }
 
-  return { isUserAuth, setUser, getUserEmail, getToken }
+  const isAdmin: UserStore['isAdmin'] = computed(() => user.value?.role === USER_ROLES.ADMIN)
+
+  return { isUserAuth, setUser, resetUser, getUserEmail, getToken, isAdmin }
 })
