@@ -2,6 +2,7 @@
 import { ref, type Ref } from 'vue'
 import { registration } from '../api'
 import { LOGIN_LINK } from '../../login'
+import { VButton } from '@/shared/ui/button'
 
 interface RegisterForm {
   email: string | null
@@ -79,13 +80,11 @@ const hasError = (field: string | null): boolean => isSubmitted.value && !field
         class="btn btn-ghost">
         Авторизоваться
       </RouterLink>
-      <button
-        type="button"
+      <VButton
         :disabled="isLoading"
-        @click="registerHandler"
-        class="btn btn-primary">
+        @click="registerHandler">
         Зарегистрироваться
-      </button>
+      </VButton>
     </div>
   </div>
 </template>

@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import { MAIN_LINK } from '@/shared/config'
 import { http } from '@/shared/api'
 import { useUserStore } from '@/entities/user'
+import { VButton } from '@/shared/ui/button'
 
 interface LoginForm {
   email: string | null
@@ -84,13 +85,11 @@ const hasError = (field: string | null): boolean => isSubmitted.value && !field
           class="btn btn-ghost"
           >Регистрация</RouterLink
         >
-        <button
-          class="btn btn-primary"
-          type="button"
+        <VButton
           :disabled="isLoading"
           @click="loginHandler">
           Войти
-        </button>
+        </VButton>
       </div>
     </div>
   </div>
