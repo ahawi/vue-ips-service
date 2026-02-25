@@ -1,17 +1,13 @@
 <script lang="ts" setup>
 import VButton from '@/shared/ui/button/VButton.vue'
 import type { Tariff } from '../api'
+import { currencyFormatter } from '@/shared/lib/formats'
 
 defineProps<Tariff>()
 
 defineEmits<{
   (e: 'subscribe', id: string): void
 }>()
-
-const currencyFormatter = new Intl.NumberFormat('ru-RU', {
-  style: 'currency',
-  currency: 'RUB'
-})
 </script>
 
 <template>
