@@ -1,3 +1,3 @@
-import type { Invoice } from './types'
+import type { Invoice, InvoiceUser } from './types'
 
-export type { Invoice }
+export type { Invoice, InvoiceUser }
