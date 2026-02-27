@@ -3,6 +3,7 @@ import { MAIN_LINK } from '@/shared/config/'
 import type { RouteLocationRaw } from 'vue-router'
 import { SUBSCRIBES_LINK } from '@/pages/subscribes'
 import { INVOICES_LINK } from '@/pages/invoices'
+import { PROFILE_LINK } from '@/pages/profile/config'
 import { useUserStore } from '@/entities/user'
 import { useRouter } from 'vue-router'
 import { VButton } from '@/shared/ui/button'
@@ -14,8 +15,7 @@ interface Link {
 
 const LINKS = [
   { to: MAIN_LINK, name: 'Главная' },
-  { to: SUBSCRIBES_LINK, name: 'Мои подписки' },
-  { to: INVOICES_LINK, name: 'Счета' }
+  { to: SUBSCRIBES_LINK, name: 'Мои подписки' }
 ] as const satisfies Array<Link>
 
 const ADMIN_LINKS = [{ to: INVOICES_LINK, name: 'Счета' }] as const satisfies Array<Link>
@@ -59,7 +59,7 @@ const logoutUser = (): void => {
         <div class="brand">ips-service</div>
         <div class="hstack">
           <div class="small">Hi, User</div>
-          <RouterLink :to="MAIN_LINK">Профиль</RouterLink>
+          <RouterLink :to="PROFILE_LINK">Профиль</RouterLink>
           <VButton @click="logoutUser"> Выход </VButton>
         </div>
       </header>

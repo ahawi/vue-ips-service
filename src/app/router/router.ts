@@ -6,6 +6,7 @@ import { MAIN_LINK } from '@/shared/config'
 import { useUserStore } from '@/entities/user'
 import { SUBSCRIBES_ROUTE } from '@/pages/subscribes'
 import { INVOICES_ROUTE } from '@/pages/invoices'
+import { PROFILE_ROUTE } from '@/pages/profile/config'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,7 +25,8 @@ const router = createRouter({
           component: MAIN_ROUTE.component
         },
         SUBSCRIBES_ROUTE,
-        { ...INVOICES_ROUTE, beforeEnter: (to, from, next) => adminRouteGuard(next) }
+        { ...INVOICES_ROUTE, beforeEnter: (to, from, next) => adminRouteGuard(next) },
+        PROFILE_ROUTE
       ],
       component: SidebarLayout
     }
