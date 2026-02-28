@@ -7,6 +7,7 @@ import { PROFILE_LINK } from '@/pages/profile/config'
 import { useUserStore } from '@/entities/user'
 import { useRouter } from 'vue-router'
 import { VButton } from '@/shared/ui/button'
+import { storeToRefs } from 'pinia'
 
 interface Link {
   to: RouteLocationRaw
@@ -20,7 +21,8 @@ const LINKS = [
 
 const ADMIN_LINKS = [{ to: INVOICES_LINK, name: 'Счета' }] as const satisfies Array<Link>
 
-const { isAdmin, userName, resetUser } = useUserStore()
+const { isAdmin, userName } = storeToRefs(useUserStore())
+const { resetUser } = useUserStore()
 
 const router = useRouter()
 
