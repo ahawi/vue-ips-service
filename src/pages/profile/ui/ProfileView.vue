@@ -7,8 +7,10 @@ import { VButton } from '@/shared/ui/button'
 import { getMyInvoices } from '../api/invoice'
 import type { Invoice } from '../model'
 import { currencyFormatter, useDateFormat } from '@/shared/lib/formats'
+import { useUserStore } from '@/entities/user'
 
 const profile: Ref<Profile | null> = ref(null)
+const { updateUserInfo } = useUserStore()
 
 const fetchProfile = async (): Promise<void> => {
   profile.value = await getProfile()
@@ -33,6 +35,7 @@ async function saveHandler(): Promise<void> {
     return
   }
 
+  updateUserInfo(payload)
   fetchProfile()
 }
 
