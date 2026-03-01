@@ -5,9 +5,9 @@ import { SUBSCRIBES_LINK } from '@/pages/subscribes'
 import { INVOICES_LINK } from '@/pages/invoices'
 import { PROFILE_LINK } from '@/pages/profile/config'
 import { useUserStore } from '@/entities/user'
-import { useRouter } from 'vue-router'
 import { VButton } from '@/shared/ui/button'
 import { storeToRefs } from 'pinia'
+import { useLogout } from '@/features/logout'
 
 interface Link {
   to: RouteLocationRaw
@@ -22,14 +22,7 @@ const LINKS = [
 const ADMIN_LINKS = [{ to: INVOICES_LINK, name: 'Счета' }] as const satisfies Array<Link>
 
 const { isAdmin, userName } = storeToRefs(useUserStore())
-const { resetUser } = useUserStore()
-
-const router = useRouter()
-
-const logoutUser = (): void => {
-  resetUser()
-  router.push({ name: MAIN_LINK.name })
-}
+const { logout } = useLogout()
 </script>
 
 <template>
@@ -62,7 +55,7 @@ const logoutUser = (): void => {
         <div class="hstack">
           <div class="small">Hi, {{ userName }}</div>
           <RouterLink :to="PROFILE_LINK">Профиль</RouterLink>
-          <VButton @click="logoutUser"> Выход </VButton>
+          <VButton @click="logout"> Выход </VButton>
         </div>
       </header>
       <main>
