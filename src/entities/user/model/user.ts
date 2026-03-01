@@ -18,12 +18,15 @@ export interface User {
   token: string
 }
 
+type UserInfo = Pick<User, 'name' | 'address'>
+
 interface UserStore {
   isUserAuth: Ref<boolean>
   isAdmin: Ref<boolean>
   userName: Ref<string>
   setUser: (userData: User) => void
   resetUser: () => void
+  updateUserInfo: (info: UserInfo) => void
   getUserEmail: () => string
   getToken: () => string
 }
@@ -40,12 +43,16 @@ export const useUserStore = defineStore('useUserStore', (): UserStore => {
     }
   })
 
-  const isUserAuth: UserStore['isUserAuth'] = computed(() => true)
+  const authUser: Ref<User> = computed(() => {
+    assertUserAuthorize(user)
+
+    return user.value
+  })
+
+  const isUserAuth: UserStore['isUserAuth'] = computed(() => !!user.value)
 
   const userName: UserStore['userName'] = computed(() => {
-    if (user.value === null) throw new Error('Logic Exception. User not authorized')
-
-    return user.value.name ?? user.value.email
+    return authUser.value.name ?? authUser.value.email
   })
 
   const setUser: UserStore['setUser'] = (userData) => {
@@ -56,19 +63,33 @@ export const useUserStore = defineStore('useUserStore', (): UserStore => {
     user.value = null
   }
 
-  const getUserEmail: UserStore['getUserEmail'] = () => {
-    if (user.value === null) throw new Error('Logic Exception. User not authorized')
+  const updateUserInfo: UserStore['updateUserInfo'] = (info) => {
+    assertUserAuthorize(user)
 
-    return user.value.email
+    const { name, address } = info
+
+    user.value.name = name
+    user.value.address = address
   }
 
-  const getToken: UserStore['getToken'] = () => {
-    if (user.value === null) throw new Error('Logic Exception. User not authorized')
+  const getUserEmail: UserStore['getUserEmail'] = () => authUser.value.email
 
-    return user.value.token
-  }
+  const getToken: UserStore['getToken'] = () => authUser.value.token
 
   const isAdmin: UserStore['isAdmin'] = computed(() => user.value?.role === USER_ROLES.ADMIN)
 
-  return { isUserAuth, isAdmin, userName, setUser, resetUser, getUserEmail, getToken }
+  function assertUserAuthorize(user: Ref<User | null>): asserts user is Ref<User> {
+    if (user.value === null) throw new Error('Logic Exception. User not authorized')
+  }
+
+  return {
+    isUserAuth,
+    isAdmin,
+    userName,
+    setUser,
+    resetUser,
+    updateUserInfo,
+    getUserEmail,
+    getToken
+  }
 })
