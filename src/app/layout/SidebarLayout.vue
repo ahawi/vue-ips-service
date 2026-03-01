@@ -2,6 +2,9 @@
 import { MAIN_LINK } from '@/shared/config/'
 import type { RouteLocationRaw } from 'vue-router'
 import { SUBSCRIBES_LINK } from '@/pages/subscribes'
+import { INVOICES_LINK } from '@/pages/invoices'
+import { useUserStore } from '@/entities/user'
+import { useRouter } from 'vue-router'
 
 interface Link {
   to: RouteLocationRaw
@@ -10,8 +13,20 @@ interface Link {
 
 const LINKS = [
   { to: MAIN_LINK, name: 'Главная' },
-  { to: SUBSCRIBES_LINK, name: 'Мои подписки' }
+  { to: SUBSCRIBES_LINK, name: 'Мои подписки' },
+  { to: INVOICES_LINK, name: 'Счета' }
 ] as const satisfies Array<Link>
+
+const ADMIN_LINKS = [{ to: INVOICES_LINK, name: 'Счета' }] as const satisfies Array<Link>
+
+const { isAdmin, resetUser } = useUserStore()
+
+const router = useRouter()
+
+const logoutUser = (): void => {
+  resetUser()
+  router.push({ name: MAIN_LINK.name })
+}
 </script>
 
 <template>
@@ -25,6 +40,17 @@ const LINKS = [
           >{{ name }}</RouterLink
         >
       </nav>
+      <template v-if="isAdmin">
+        <hr />
+        <nav>
+          <RouterLink
+            v-for="{ to, name } in ADMIN_LINKS"
+            :to
+            :key="name"
+            >{{ name }}</RouterLink
+          >
+        </nav>
+      </template>
     </aside>
 
     <div class="content">
@@ -33,6 +59,12 @@ const LINKS = [
         <div class="hstack">
           <div class="small">Hi, User</div>
           <RouterLink :to="MAIN_LINK">Профиль</RouterLink>
+          <button
+            type="button"
+            class="btn btn-primary"
+            @click="logoutUser">
+            Выход
+          </button>
         </div>
       </header>
       <main>

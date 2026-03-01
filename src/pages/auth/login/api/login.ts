@@ -1,4 +1,5 @@
 import { http } from '@/shared/api'
+import type { User } from '@/entities/user'
 
 interface LoginData {
   user: {
@@ -7,7 +8,7 @@ interface LoginData {
     password_hash: string
     name: string | null
     address: string | null
-    role: string
+    role: User['role']
     created_at: string
   }
   token: string
