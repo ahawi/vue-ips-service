@@ -18,10 +18,17 @@ const form: Ref<LoginForm> = ref({
 
 const router = useRouter()
 
-const loginHandler = async (): Promise<void> => {
-  if (!isFormValid(form.value)) return
+const isSubmitted: Ref<boolean> = ref(false)
+const isLoading: Ref<boolean> = ref(false)
 
+const loginHandler = async (): Promise<void> => {
+  isSubmitted.value = true
+  if (!isFormValid(form.value)) return
+  isSubmitted.value = false
+
+  isLoading.value = true
   const user = await login(form.value)
+  isLoading.value = false
 
   if (user === null) {
     alert('Пользователь не найден')
@@ -33,6 +40,8 @@ const loginHandler = async (): Promise<void> => {
 
 const isFormValid = (form: LoginForm): form is { email: string; password: string } =>
   Object.values(form).every(Boolean)
+
+const hasError = (field: string | null): boolean => isSubmitted.value && !field
 </script>
 
 <template>
@@ -43,24 +52,31 @@ const isFormValid = (form: LoginForm): form is { email: string; password: string
         <label class="label">Email</label>
         <input
           class="input"
-          v-model="form.email" />
+          v-model="form.email"
+          :disabled="isLoading"
+          :class="{ error: hasError(form.email) }" />
       </div>
       <div>
         <label class="label">Пароль</label>
         <input
           type="password"
           class="input"
-          v-model="form.password" />
+          v-model="form.password"
+          :disabled="isLoading"
+          :class="{ error: hasError(form.password) }" />
       </div>
       <div class="hstack">
         <RouterLink
           :to="REGISTER_LINK"
+          :disabled="isLoading"
+          :class="{ disabled: isLoading }"
           class="btn btn-ghost"
           >Регистрация</RouterLink
         >
         <button
           class="btn btn-primary"
           type="button"
+          :disabled="isLoading"
           @click="loginHandler">
           Войти
         </button>
@@ -72,5 +88,21 @@ const isFormValid = (form: LoginForm): form is { email: string; password: string
 <style scoped>
 .hstack {
   justify-content: space-between;
+}
+
+.error {
+  border: 1px solid red;
+}
+
+.btn:disabled {
+  opacity: 0.3;
+}
+
+.input:disabled {
+  background: gainsboro;
+}
+
+.btn-ghost.disabled {
+  pointer-events: none;
 }
 </style>
