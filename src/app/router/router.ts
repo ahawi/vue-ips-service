@@ -29,6 +29,10 @@ const router = createRouter({
         PROFILE_ROUTE
       ],
       component: SidebarLayout
+    },
+    {
+      path: '/:catchAll(.*)',
+      redirect: MAIN_LINK
     }
   ]
 })

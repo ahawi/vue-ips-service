@@ -20,7 +20,7 @@ const LINKS = [
 
 const ADMIN_LINKS = [{ to: INVOICES_LINK, name: 'Счета' }] as const satisfies Array<Link>
 
-const { isAdmin, resetUser } = useUserStore()
+const { isAdmin, userName, resetUser } = useUserStore()
 
 const router = useRouter()
 
@@ -58,7 +58,7 @@ const logoutUser = (): void => {
       <header class="header">
         <div class="brand">ips-service</div>
         <div class="hstack">
-          <div class="small">Hi, User</div>
+          <div class="small">Hi, {{ userName }}</div>
           <RouterLink :to="PROFILE_LINK">Профиль</RouterLink>
           <VButton @click="logoutUser"> Выход </VButton>
         </div>
