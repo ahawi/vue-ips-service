@@ -5,6 +5,8 @@ import { REGISTER_LINK } from '../../register'
 import { login } from '../api'
 import { useRouter } from 'vue-router'
 import { MAIN_LINK } from '@/shared/config'
+import { http } from '@/shared/api'
+import { useUserStore } from '@/entities/user'
 
 interface LoginForm {
   email: string | null
@@ -17,6 +19,7 @@ const form: Ref<LoginForm> = ref({
 })
 
 const router = useRouter()
+const { setUser } = useUserStore()
 
 const isSubmitted: Ref<boolean> = ref(false)
 const isLoading: Ref<boolean> = ref(false)
@@ -27,13 +30,21 @@ const loginHandler = async (): Promise<void> => {
   isSubmitted.value = false
 
   isLoading.value = true
-  const user = await login(form.value)
+  const response = await login(form.value)
   isLoading.value = false
 
-  if (user === null) {
+  if (response === null) {
     alert('Пользователь не найден')
     return
   }
+
+  const {
+    user: { id, name, address, email, role },
+    token
+  } = response
+
+  setUser({ id, name, address, email, role, token })
+  http.setToken(token)
 
   router.push(MAIN_LINK)
 }
