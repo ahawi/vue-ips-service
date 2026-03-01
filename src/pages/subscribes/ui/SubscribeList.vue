@@ -6,10 +6,13 @@ import { getSubscribeList } from '../api'
 import { useDateFormat } from '@/shared/lib/formats'
 import { currencyFormatter } from '@/shared/lib/formats'
 
+const isLoading: Ref<boolean> = ref(false)
 const subscribes: Ref<Array<Subscribe>> = ref([])
 
 onMounted(async () => {
+  isLoading.value = true
   subscribes.value = await getSubscribeList()
+  isLoading.value = false
 })
 </script>
 
@@ -28,18 +31,31 @@ onMounted(async () => {
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="{ id, name, subscribeAt, price, speed } in subscribes"
-            :key="id">
-            <td>{{ name }}</td>
-            <td>{{ useDateFormat(subscribeAt, 'DD-MM-YYYY') }}</td>
-            <td>{{ currencyFormatter.format(price) }}</td>
-            <td>{{ speed }}</td>
+          <tr v-if="isLoading">
+            <td class="name skeleton"></td>
+            <td class="date skeleton"></td>
+            <td class="currency skeleton"></td>
+            <td class="speed skeleton"></td>
           </tr>
+          <template v-else>
+            <tr
+              v-for="{ id, name, subscribeAt, price, speed } in subscribes"
+              :key="id">
+              <td>{{ name }}</td>
+              <td>{{ useDateFormat(subscribeAt, 'DD-MM-YYYY') }}</td>
+              <td>{{ currencyFormatter.format(price) }}</td>
+              <td>{{ speed }}</td>
+            </tr></template
+          >
         </tbody>
       </table>
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.name {
+  width: 20rem;
+  height: 1.6rem ;
+}
+</style>
