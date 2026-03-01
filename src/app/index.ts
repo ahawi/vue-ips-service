@@ -6,8 +6,10 @@ import App from './App.vue'
 import { router } from './router'
 import './styles/main.css'
 import { useUserStore } from '@/entities/user'
+import { AUTH_SECTION_LINKS } from '@/pages/auth'
 
 const unAuthorizedHandler = (): void => {
+  router.push({ name: AUTH_SECTION_LINKS.LOGIN.name })
   const { resetUser } = useUserStore()
 
   resetUser()
