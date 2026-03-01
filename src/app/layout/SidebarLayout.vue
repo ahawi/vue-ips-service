@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { MAIN_LINK } from '@/shared/config/'
 import type { RouteLocationRaw } from 'vue-router'
+import { SUBSCRIBES_LINK } from '@/pages/subscribes'
 
 interface Link {
   to: RouteLocationRaw
@@ -8,10 +9,8 @@ interface Link {
 }
 
 const LINKS = [
-  {
-    to: MAIN_LINK,
-    name: 'Главная'
-  }
+  { to: MAIN_LINK, name: 'Главная' },
+  { to: SUBSCRIBES_LINK, name: 'Мои подписки' }
 ] as const satisfies Array<Link>
 </script>
 

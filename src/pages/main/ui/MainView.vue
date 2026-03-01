@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref, type Ref } from 'vue'
-import { getTariffList, type Tariff } from '../api'
+import { getTariffList, subscribeToTariff, type Tariff } from '../api'
 import TariffCard from './TariffCard.vue'
 import TariffSkeleton from './TariffSkeleton.vue'
 
@@ -31,7 +31,8 @@ onMounted(fetchTariffs)
           <TariffCard
             v-for="tariff in tariffs"
             :key="tariff.id"
-            v-bind="tariff" />
+            v-bind="tariff"
+            @subscribe="subscribeToTariff" />
         </template>
 
         <template v-else> На данный момент список тарифов пуст. Обратитесь к провайдеру. </template>

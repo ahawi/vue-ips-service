@@ -4,6 +4,7 @@ import { AUTH_SECTION_ROUTE } from '@/pages/auth'
 import { MAIN_ROUTE } from '@/pages/main'
 import { MAIN_LINK } from '@/shared/config'
 import { useUserStore } from '@/entities/user'
+import { SUBSCRIBES_ROUTE } from '@/pages/subscribes'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +21,8 @@ const router = createRouter({
           path: '',
           name: MAIN_ROUTE.name,
           component: MAIN_ROUTE.component
-        }
+        },
+        SUBSCRIBES_ROUTE
       ],
       component: SidebarLayout
     }
