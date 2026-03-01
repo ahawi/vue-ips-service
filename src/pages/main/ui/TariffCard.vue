@@ -1,16 +1,13 @@
 <script lang="ts" setup>
+import VButton from '@/shared/ui/button/VButton.vue'
 import type { Tariff } from '../api'
+import { currencyFormatter } from '@/shared/lib/formats'
 
 defineProps<Tariff>()
 
 defineEmits<{
   (e: 'subscribe', id: string): void
 }>()
-
-const currencyFormatter = new Intl.NumberFormat('ru-RU', {
-  style: 'currency',
-  currency: 'RUB'
-})
 </script>
 
 <template>
@@ -36,12 +33,7 @@ const currencyFormatter = new Intl.NumberFormat('ru-RU', {
           {{ speed }} Mb/s
         </div>
         <RouterLink to="/">Подробнее</RouterLink>
-        <button
-          class="btn btn-primary"
-          type="button"
-          @click="$emit('subscribe', id)">
-          Подключить
-        </button>
+        <VButton @click="$emit('subscribe', id)"> Подключить </VButton>
       </div>
     </div>
   </div>

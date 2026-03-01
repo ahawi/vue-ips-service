@@ -5,6 +5,7 @@ import { SUBSCRIBES_LINK } from '@/pages/subscribes'
 import { INVOICES_LINK } from '@/pages/invoices'
 import { useUserStore } from '@/entities/user'
 import { useRouter } from 'vue-router'
+import { VButton } from '@/shared/ui/button'
 
 interface Link {
   to: RouteLocationRaw
@@ -59,12 +60,7 @@ const logoutUser = (): void => {
         <div class="hstack">
           <div class="small">Hi, User</div>
           <RouterLink :to="MAIN_LINK">Профиль</RouterLink>
-          <button
-            type="button"
-            class="btn btn-primary"
-            @click="logoutUser">
-            Выход
-          </button>
+          <VButton @click="logoutUser"> Выход </VButton>
         </div>
       </header>
       <main>
