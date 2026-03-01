@@ -32,7 +32,7 @@ const router = createRouter({
     },
     {
       path: '/:catchAll(.*)',
-      redirect: MAIN_LINK
+      redirect: { name: MAIN_LINK.name, params: {} }
     }
   ]
 })
