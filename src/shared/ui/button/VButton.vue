@@ -19,3 +19,9 @@ defineEmits<{
     <slot />
   </button>
 </template>
+
+<style scoped>
+.btn:disabled {
+  opacity: 0.5;
+}
+</style>

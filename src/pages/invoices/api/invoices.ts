@@ -1,5 +1,5 @@
 import { http } from '@/shared/api'
-import type { Invoice } from '../model'
+import type { Invoice, InvoiceUser } from '../model'
 
 const INVOICE_PATH = '/invoices'
 
@@ -17,7 +17,7 @@ interface InvoiceDTO {
 }
 
 export const getInvoiceList = async (): Promise<Array<Invoice>> => {
-  const list = await http.fetchData<Array<Invoice>>({ url: INVOICE_PATH, method: 'GET' })
+  const list = await http.fetchData<Array<InvoiceDTO>>({ url: INVOICE_PATH, method: 'GET' })
 
   return list === null ? [] : list.map(invoiceMapDTO)
 }
@@ -29,8 +29,17 @@ const invoiceMapDTO = ({ id, users: { email }, amount, status }: InvoiceDTO): In
   status
 })
 
-export const createInvoice = async (userId: string = ''): Promise<boolean> =>
+export const createInvoice = async (userId: string): Promise<boolean> =>
   http.isSuccess({
     url: `${INVOICE_PATH}/generate/${userId}`,
     method: 'POST'
   })
+
+export const getUsersForInvoice = async (): Promise<Array<InvoiceUser>> => {
+  const list = await http.fetchData<Array<InvoiceUser>>({
+    url: `${INVOICE_PATH}/users`,
+    method: 'GET'
+  })
+
+  return list ?? []
+}
