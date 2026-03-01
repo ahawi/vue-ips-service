@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, type Ref } from 'vue'
 import { registration } from '../api'
+import { LOGIN_LINK } from '../../login'
 
 interface RegisterForm {
   email: string | null
@@ -56,7 +57,7 @@ const isFormValid = (
     </div>
     <div class="hstack">
       <RouterLink
-        to="/login"
+        :to="LOGIN_LINK"
         class="btn btn-ghost">
         Авторизоваться
       </RouterLink>
